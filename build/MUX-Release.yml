@@ -1,5 +1,13 @@
 name: $(BuildDefinitionName)_$(date:yyMM).$(date:dd)$(rev:rrr)
 jobs:
+- job: Component Detection
+  pool:
+    vmImage: 'VS2017-Win2016'
+
+  steps:
+  - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+    displayName: 'Component Detection'
+
 - job: Build
   pool:
     vmImage: 'VS2017-Win2016'
@@ -32,9 +40,7 @@ jobs:
     value: $(Build.ArtifactStagingDirectory)
 
   steps:
-  - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-    displayName: 'Component Detection'
-
+  
   - template: AzurePipelinesTemplates\MUX-BuildProject-Steps.yml
     parameters:
       solutionPath: MUXControls.sln
